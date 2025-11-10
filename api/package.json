@@ -1,7 +1,9 @@
 {
-  "name": "my-supabase-app",
+  "name": "supabase-rate-fetcher",
   "version": "1.0.0",
+  "description": "Fetches rate from Supabase via Vercel Serverless Function.",
   "dependencies": {
-    "@supabase/supabase-js": "^2.80.0" 
+    "@supabase/supabase-js": "^2.43.4" 
+  
   }
 }

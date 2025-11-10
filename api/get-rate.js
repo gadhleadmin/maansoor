@@ -1,44 +1,45 @@
 // api/get-rate.js
+
 import { createClient } from '@supabase/supabase-js';
 
-// **FURAYAASHA WAXAA LAGA SOO QAADANAYA ENVIRONMENT VARIABLES EE VERCEL**
+// Hubi in Vercel Environment Variables-ka la helay
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; 
 
-// Hubi in Environment Variables-ka ay jiraan (Haddii Vercel uusan helin, wuu jabayaa deployment-ka)
+// Hubinta degdegga ah (Haddii furayaashu maqan yihiin, wuxuu koodhku jabi doonaa bilowga)
 if (!supabaseUrl || !supabaseServiceKey) {
-  throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables.');
+  // Waxaa muhiim ah in aad Vercel Settings: Environment Variables ku darto labadan fure
+  throw new Error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY. Check Vercel settings.');
 }
 
-// Isticmaal Service Role Key si loo dhaafo RLS (Row Level Security)
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 
 export default async function handler(req, res) {
-  // Oggolow kaliya codsiyada GET
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
-    // 1. Soo qaado rate-ka ugu dambeeyay ee table-ka 'rates'
+    // Codsiga Supabase: Soo qaado rate-ka ugu dambeeyay
     const { data: rates, error } = await supabase
-      .from('rates') // Magaca table-kaaga
-      .select('rate') // Column-ka aad doonayso
-      .order('created_at', { ascending: false }) // Ka ugu dambeeyay
+      .from('rates') // Xaqiiji magaca table-kaaga
+      .select('rate') // Xaqiiji magaca column-ka 'rate'
+      .order('created_at', { ascending: false }) // Ka soo qaad ka ugu dambeeyay (haddii uu jiro created_at)
       .limit(1) 
-      .single(); // Soo celi object keliya
+      .single(); 
 
     if (error) {
       console.error('Supabase Query Error:', error.message);
+      // Ku soo celi 500 oo wata fariin JSON ah
       return res.status(500).json({ error: 'Fails to execute Supabase query', details: error.message });
     }
 
-    // 2. Soo dir rate-ka JSON ahaan
+    // Soo dir rate-ka loo baahan yahay
     if (rates && rates.rate !== undefined) {
       return res.status(200).json({
         success: true,
-        current_rate: rates.rate, // Xogta la soo celinayo
+        current_rate: rates.rate, 
         retrieved_at: new Date().toISOString()
       });
     } else {
