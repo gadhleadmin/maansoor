@@ -1,25 +1,483 @@
 <!DOCTYPE html>
-<html lang="so">
+<html lang="EN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sarrifka Lacagta Ee Maanta</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="favicon.png"> </head>
+
+     <title>Sarifka Maanta - Qiimaha Sarifka Shillinka Somaliland Shilling (SLSH)</title>
+
+    <meta name="description" content="Sarifka Maanta - Qiimaha Sarifka Shillinka Somaliland Shilling (SLSH) oo la barbardhigo USD, EUR, GBP iyo lacagaha kale. Live updates iyo currency converter.">
+
+    <meta name="keywords" content="Sarifka maanta, Somaliland Shilling, SLSH, exchange rates, USD to SLSH, EUR to SLSH, GBP to SLSH, live currency converter, Somaliland Forex, dollar rate Somalia">
+    <meta name="author" content="CasriDev Technologies">
+
+    <meta name="google-site-verification" content="GizjhJvczJyhTvqLDimUQ1UYNXAITcKiShbqFHVCyDA" />
+
+
+
+    <link rel="icon" type="image/png" href="/images/favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="./pages/global.css">
+    <link rel="stylesheet" href="./pages/index.css">
+</head>
+
+
 <body>
 
-    <header>
-        <h1>Qiimaha Sarrifka</h1>
-    </header>
+<header>
+  <div class="logo-container">
+    <div class="logo">
+      <img src="./images/logo.png" alt="main logo">
+    </div>
+    <div class="site-title">
+      <h1>Sarifka Maanta</h1>
+      <h2>Live rates & news</h2>
+    </div>
+  </div>
 
-    <main class="container">
-        <div class="rate-display">
-            <h2 id="main-rate">Loading...</h2> 
-            <span class="currency-label">SLSH</span>
+
+
+  <nav class="main-nav">
+
+      <!-- search  button -->
+    <div class="search-container">
+    <input type="text" id="search-input" placeholder="raadi..." aria-label="Search for currency rates">
+    <button id="search-button" aria-label="Search">
+        <i class="fas fa-search"></i>
+    </button>
+  </div>
+
+   <!-- login  button -->
+  <div id="user-profile" class="user-profile">
+    
+    <span id="usernameDisplay" class="username" style="display: none;"></span> 
+    
+    <a href="/login" id="loginButton" class="login-btn" style="display: none;">
+        Login
+    </a>
+</div>
+
+   <!-- notification  button -->
+    <div class="notification-container">
+     <button id="show-notification-btn" class="btn">
+    <i class="fas fa-bell"></i>
+    <span id="notification-badge" class="notification-badge hidden"></span>
+</button>
+    </div>
+
+    
+
+
+  
+ 
+
+  <!-- Hamburger button -->
+  <div class="hamburger" onclick="toggleMenu()">☰</div>
+
+  <!-- Hidden menu -->
+  <div class="menu-links" id="menu">
+    <a href="/login" class="btn">
+      <i class="fas fa-sign-in-alt"> Login</i>
+    </a>
+
+     <a href="/crypto" class="btn">
+      <i class="fas fa-info-circle"> Crypto</i>
+    </a>
+
+     <a href="/about" class="btn">
+      <i class="fas fa-envelope"> about</i>
+    </a>
+
+     <a href="/community" class="btn">
+      <i class="fas fa-users"> Community</i>
+    </a>
+
+      <a href="/profile" class="btn">
+      <i class="fas fa-users"> Profile</i>
+    </a>
+
+      <a href="/Settings" class="btn">
+      <i class="fas fa-cog"> Settings</i>
+    </a>
+
+    <select id="language-switcher">
+  <option value="en">Ingiriisi</option>
+  <option value="ar">Carabi</option>
+  <option value="so">Soomaali</option>
+</select>
+
+    <button onclick="shareApp()" class="share-btn">
+  📤 Share
+</button>
+
+
+    <label class="switch">
+  <input type="checkbox" id="darkModeToggle">
+  <span class="slider"></span>
+</label>
+
+  </div>
+   </nav>
+</header>
+
+    <main class="index-main">
+
+        <div class="buttonone">
+            <a href="/" class="nav-link">
+                <i class="fas fa-home"></i> <span data-key="home-nav">Home</span>
+            </a>
+            <a href="/history" class="nav-link">
+                <i class="fas fa-history"></i> <span>History</span>
+            </a>
+            <a href="/news" class="nav-link">
+                <i class="fas fa-newspaper"></i> <span>News</span>
+            </a>
+            <a href="/crypto" class="nav-link">
+                <i class="fas fa-coins"></i>
+                <span>Crypto</span>
+            </a>
+            <a href="https://zpgqysoxonsfcgzwrhrg.supabase.co/storage/v1/object/public/app-download/sarif.apk">
+                <i class="fas fa-download"></i> <span>APP</span>
+            </a>
         </div>
-        <p class="source-info" id="source-info">Fadlan sug inta xogta la soo qabanayo...</p>
+        <section class="hero-section">
+            <div class="hero-content">
+                <div class="main-content-container">
+
+                    <!-- Muunays -->
+                    <div class="muunays">
+
+                   <div class="xayasiis">
+                    <marquee behavior="scroll" direction="left" scrollamount="5">
+                        <span>Advertise with us! Contact: info@sarifkamaanta.com</span>
+                    </marquee>
+                   </div>
+
+
+                    <div class="live-rate-container">
+                      <div class="live-rate-sharing">
+                        <div class="live-rate-header">
+                            <img src="./images/loo.png" alt="Live Rate Icon" width="20" height="20">
+                            <h4>Somaliland Shillings Live Rate</h4>
+                        </div>
+
+                        <div class="time-date">
+                            <p id="real-date">Loading date...</p>
+                            <p id="real-time">Loading time...</p>
+                        </div>
+
+                      <div class="rate-display">
+    <h2 id="main-rate">Loading...</h2> <span class="currency-label">SLSH</span>
+</div>
+
+                        <div class="rate-update">
+                            <p id="rate-change" class="rate-change"></p>
+                             <div class="gacanta-danbe">
+                                <span class="live-indicator"></span>
+                                <p>Gacanta Danbe</p>
+                            </div>
+
+                            <div class="live-status">
+                                <span class="live-indicator"></span>
+                                <p>LIVE</p>
+                            </div>
+                           
+                        </div>
+                        <p class="update-frequency">Updates every 5 minutes- Live Market Data</p>
+
+                        <div id="source">
+                            <p>SarifkaMaanta.com</p>
+                        </div>
+
+                      </div>
+                    </div>
+
+                     <div class="shareandsarif">
+                     <div class="sarif-button">
+               <a href="/exchange" class="nav-link">
+                 <i class="fas fa-exchange-alt"></i>
+                 <span>Sarifo hadda</span>
+                      </a>      </div>
+
+
+                    <div class="share-button-container">
+                        <p>Share this rate:</p>
+                        <button id="shareBtn"><i class="fas fa-share-alt"></i></button>
+                    </div>
+                    </div>
+
+
+                    </div>
+
+
+
+                    
+
+
+                    
+                    <section class="converter-section">
+                        <h2 class="section-title">Xisaabiyaha Sarifka Lacagaha</h2>
+                        <div class="converter-container">
+                            <div class="input-group">
+                                <input type="number" id="from-amount" value="1" min="0">
+                                <select id="from-currency">
+                                    <option value="USD">USD</option>
+                                    <option value="SLSH" selected>SLSH</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="KES">KES</option>
+                                    <option value="ETB">ETB</option>
+                                    <option value="SOS">SOS</option>
+                                    <option value="SAR">SAR</option>
+                                    <option value="AED">AED</option>
+                                </select>
+                            </div>
+                            <div class="exchange-icon">
+                                <i class="fas fa-exchange-alt"></i>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="to-amount" readonly>
+                                <select id="to-currency">
+                                    <option value="SLSH">SLSH</option>
+                                    <option value="USD" selected>USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="KES">KES</option>
+                                    <option value="ETB">ETB</option>
+                                    <option value="SOS">SOS</option>
+                                    <option value="SAR">SAR</option>
+                                    <option value="AED">AED</option>
+                                </select>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                
+
+                  <hr class="divider">
+                <div class="qabanqaabo">
+            <div class="exchange-table-container">
+    <h3>Top 10 Exchangers</h3>
+    <table class="exchangers-table">
+        <thead> <tr>
+                <th>Magaca</th>
+                <th>Lambarka Sariflaha</th>
+                <th>Rate (SLSH / USD)</th>
+                <th>La Xiriir</th>
+            </tr>
+        </thead>
+        <tbody id="exchangersTableBody">
+            </tbody>
+    </table>
+    <div class="table-footer">
+        <button id="viewAllBtn" class="btn">View All Sarifayaasha</button>
+    </div>
+</div>
+     
+                <div class="prediction-section">
+
+                    <h4>Upcoming Weekly Prediction </h4>
+
+                    <div class="prediction-buttons-container">
+                        <div class="prediction-details">
+                        <p class="note">This prediction is updated weekly based on market data 📈</p>
+                        </div>
+                        <div class="prediction-buttons-real">
+    <button id="up-prediction-btn" class="prediction-btn up-btn">
+        <i class="fas fa-arrow-up"></i>
+        <span><span id="up-percent">...</span>% Up</span>
+    </button>
+    <button id="down-prediction-btn" class="prediction-btn down-btn">
+        <i class="fas fa-arrow-down"></i>
+        <span><span id="down-percent">...</span>% Down</span>
+    </button> 
+
+    </div>
+</div>
+</div>
+
+
+
+
+                </div>
+
+            </div>
+            
+        </section>
+
+
+                     
+        <div class="small-rate-cards-container">
+            <h2 class="section-title">Global Currency Rates in SLSH</h2>
+
+            <div class="statistics-cards">
+            <div class="small-rate-card">
+                <h3>USD / SLSH</h3>
+                <p id="usd-rate-value" class="small-rate-value">Loading...</p>
+             
+            </div>
+            <div class="small-rate-card">
+                <h3>EUR / USD</h3>
+                <p id="eur-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            <div class="small-rate-card">
+                <h3>GBP / USD</h3>
+                <p id="gbp-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            <div class="small-rate-card">
+                <h3>ETB / USD</h3>
+                <p id="etb-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            <div class="small-rate-card">
+                <h3>KES / USD</h3>
+                <p id="kes-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            <div class="small-rate-card">
+                <h3>SOS / USD</h3>
+                <p id="sos-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            <div class="small-rate-card">
+                <h3>SAR / USD</h3>
+                <p id="sar-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            <div class="small-rate-card">
+                <h3>AED / USD</h3>
+                <p id="aed-rate-value" class="small-rate-value">Loading...</p>
+            </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+        <hr class="divider">
+<div class="crypto-rates-container">
+    <h2 class="section-title">Top 10 Crypto Prices</h2>
+    <div class="crypto-cards-grid" id="crypto-cards-grid">
+        <div class="loading-state">
+            <p>Loading crypto data...</p>
+        </div>
+    </div>
+</div>
+
+        <hr class="divider">
+        <section class="statistics-section">
+            <h2 class="section-title">Market Overview & Statistics</h2>
+            <div class="statistics-container">
+                <div class="stat-card">
+                    <i class="fas fa-chart-line"></i>
+                    <div class="stat-content">
+                        <p class="stat-label">All-Time High</p>
+                        <p id="all-time-high" class="stat-value">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <i class="fas fa-signal"></i>
+                    <div class="stat-content">
+                        <p class="stat-label">All-Time Low</p>
+                        <p id="all-time-low" class="stat-value volatile">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <i class="fas fa-history"></i>
+                    <div class="stat-content">
+                        <p class="stat-label">Last 24h Change</p>
+                        <p id="last-24h-change" class="stat-value change-up">Loading...</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <i class="fas fa-hand-holding-usd"></i>
+                    <div class="stat-content">
+                        <p class="stat-label">Last 7d Change</p>
+                        <p id="last-7d-change" class="stat-value">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="divider">
+
+        <section class="news-section">
+    <div class="container">
+        <h2>Latest News</h2>
+        <div class="news-list" id="latest-news">
+            <div class="news-placeholder">
+                <p>Loading news...</p>
+            </div>
+        </div>
+        <div class="view-all-container">
+            <a href="/news" class="view-all-btn">View All News</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-container">
+        <img src="./images/loo.png" alt="CasriDev Logo" height="30" width="30">
+        <p>CasriDev Technologies</p>
+        <p>© 2025  All Rights Reserved</p>
+    </div>
+</footer>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+        <script src="script.js"></script>
+       
+
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PDD9HTDKTK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PDD9HTDKTK');
+</script>
+
+
+        <script>
+  function toggleMenu() {
+    document.getElementById("menu").classList.toggle("active");
+  }
+</script>
+
+
+<script>
+function shareApp() {
+  if (navigator.share) {
+    navigator.share({
+      title: "My Web App",
+      text: "Fiiri appkan xiisaha leh!",
+      url: window.location.href
+    }).then(() => {
+      console.log("Shared successfully");
+    }).catch(err => {
+      console.log("Share failed:", err);
+    });
+  } else {
+    alert("Sharing not supported on this device/browser.");
+  }
+}
+</script>
+
+
+
+
+        <link rel="manifest" href="/manifest.json">
+
     </main>
 
-    <script src="script.js"></script> 
 </body>
+
 </html>
