@@ -35,9 +35,7 @@ async function fetchRate() {
         if (data.success && data.current_rate !== undefined) {
             // Xaqiiji qaabka lacagta (Comma separator)
             const formattedRate = new Intl.NumberFormat('so-SO').format(data.current_rate);
-            
-            rateDisplayElement.textContent = formattedRate;
-            sourceInfoElement.textContent = `Rate-ka La Helay: ${new Date().toLocaleTimeString('so-SO')}`;
+
 
         } else {
             rateDisplayElement.textContent = 'N/A';
@@ -54,3 +52,4 @@ async function fetchRate() {
 
 // Wac shaqada marka boggu furmo
 fetchRate();
+
