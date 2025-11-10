@@ -11,24 +11,33 @@ async function fetchRate() {
         // Codsiga u dir Serverless Function-ka
         const response = await fetch('/api/get-rate');
         
+     // public/script.js - Hagaajinta Response Reading Error
+// ... (Koodhka hore) ...
+
         // Hubi in jawaabtu guulaysatay (Status 200-299)
         if (!response.ok) {
             let errorText = `HTTP error! Status: ${response.status}`;
             
+            // 🛑 Tallaabada 1: Akhri jawaabta response-ka hal mar oo keliya text ahaan
+            const bodyContent = await response.text(); 
+            
             try {
-                // Isku day in aad u beddesho JSON haddii Serverless Function-ka uu soo celiyay JSON error
-                const errorData = await response.json();
-                errorText = errorData.error || JSON.stringify(errorData);
+                // Tallaabada 2: Isku day in aad u beddesho JSON content-ka la akhriyay
+                const errorData = JSON.parse(bodyContent);
+                // Haddii uu si guul leh u beddelo JSON, qaado fariinta error-ka
+                errorText = errorData.error || errorData.details || bodyContent;
             } catch (jsonError) {
-                // Haddii uusan ahayn JSON (sida 404 HTML page), qaado text ahaan
-                errorText = await response.text();
+                // Tallaabada 3: Haddii aanu ahayn JSON (sida HTML/Text), isticmaal text-kaas oo dhan
+                errorText = bodyContent;
             }
             
+            // Ku tuur khaladka la hagaajiyay
             throw new Error(`Codsiga ma guulaysan: ${errorText.substring(0, 150)}...`);
         }
         
-        // U beddel JSON
-        const data = await response.json();
+        // Hadda waa hubaal 200 OK, u beddel JSON
+        const data = await response.json(); 
+        
 
         if (data.success && data.current_rate !== undefined) {
             // Halkan waxaan ku isticmaalaynaa 'current_rate'
