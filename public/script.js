@@ -70,7 +70,7 @@ async function fetchRate() {
             rateDisplayElement.textContent = formattedRate;
             
             // 🛑 HAGAAGINTA WAXAA LAGA SAARAY WAQTIGII 🛑
-            sourceInfoElement.textContent = 'Rate-ka waxaa si guul ah loo helay.'; 
+            sourceInfoElement.textContent = ''; 
 
         } else {
             rateDisplayElement.textContent = 'N/A';
