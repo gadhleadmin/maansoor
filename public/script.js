@@ -199,211 +199,93 @@ function setupConverterListeners() {
 // ----------------------------------------------------
 // Qaybta 4: Xisaabinta Tirakoobyada (Waa sidii hore)
 // ----------------------------------------------------
-function updateStatistics(allRates) {
-    // Shaandhee xogta si aad u hesho kaliya USD
-    const usdRates = allRates.filter(d => d.currency === 'USD');
+function updateChart(currency) {
+    const ctx = document.getElementById('rateChart');
+    if (!ctx) return;
 
-    if (usdRates.length === 0) {
-        console.warn("No USD data found for statistics.");
-        document.getElementById('all-time-high').innerText = 'N/A';
-        document.getElementById('all-time-low').innerText = 'N/A';
-        document.getElementById('last-24h-change').innerText = 'N/A';
-        document.getElementById('last-7d-change').innerText = 'N/A';
+    // Shaandhee xogta lacagta la doortay oo ku kala saar taariikh ahaan
+    const chartData = allRates
+        .filter(d => d.currency === currency)
+        .sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
+    // Diyaarinta xogta jadwalka
+    const labels = chartData.map(d => new Date(d.created_at).toLocaleDateString());
+    const dataPoints = chartData.map(d => d.rate);
+
+    // Burburi jadwalkii hore haddii uu jiro
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    // Abuur jadwalka cusub ee Chart.js
+    chartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `${currency}/SLSH Rate`,
+                data: dataPoints,
+                borderColor: '#1e40af',
+                backgroundColor: 'rgba(30, 64, 175, 0.1)',
+                borderWidth: 2,
+                tension: 0.4,
+                pointRadius: 3,
+                pointHoverRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+}
+
+
+// ----------------------------------------------------
+// Qaybta 5: Saadaalinta Isbeddelka Sicirka Lacagta ⬅️ HAGAAJIN (Waa inuu jiraa)
+// ----------------------------------------------------
+function updatePrediction() {
+    const today = new Date();
+    const dayOfMonth = today.getDate(); 
+
+    const upPercentElement = document.getElementById('up-percent');
+    const downPercentElement = document.getElementById('down-percent');
+    const upButton = document.getElementById('up-prediction-btn');
+    const downButton = document.getElementById('down-prediction-btn');
+
+    if (!upPercentElement || !downPercentElement || !upButton || !downButton) {
+        console.error("One or more prediction elements not found.");
         return;
     }
 
-    // Xisaabi sicirka ugu sarreeya iyo kan ugu hooseeya
-    const rateValues = usdRates.map(d => Number(d.rate));
-    const allTimeHigh = Math.max(...rateValues);
-    const allTimeLow = Math.min(...rateValues);
+    const randomPrediction = (Math.random() * 2.4 + 0.1).toFixed(1);
 
-    document.getElementById('all-time-high').innerText = `${allTimeHigh.toLocaleString('so-SO')} SLSH`;
-    document.getElementById('all-time-low').innerText = `${allTimeLow.toLocaleString('so-SO')} SLSH`;
+    if (dayOfMonth >= 28 || dayOfMonth <= 10) {
+        upPercentElement.innerText = randomPrediction;
+        downPercentElement.innerText = '...';
+        upButton.disabled = false;
+        downButton.disabled = true;
+    } else {
+        downPercentElement.innerText = randomPrediction;
+        upPercentElement.innerText = '...';
+        upButton.disabled = true;
+        downButton.disabled = false;
+    }
+}
 
-    // Xisaabi isbeddelka 24-kii saac ee la soo dhaafay
+
+// ----------------------------------------------------
+// Qaybta 6: Taariikhda iyo Waqtiga ⬅️ HAGAAJIN (Waa inuu jiraa)
+// ----------------------------------------------------
+function updateDateTime() {
     const now = new Date();
-    const twentyFourHoursAgo = now.getTime() - (24 * 60 * 60 * 1000);
-    const ratesLast24h = usdRates.filter(d => new Date(d.created_at).getTime() >= twentyFourHoursAgo);
-
-    if (ratesLast24h.length >= 2) {
-        const latestRate = Number(ratesLast24h[0].rate);
-        const previousRate = Number(ratesLast24h[ratesLast24h.length - 1].rate);
-        const change24h = (latestRate - previousRate) / previousRate * 100;
-        const changeText = `${change24h > 0 ? '+' : ''}${change24h.toFixed(2)}%`;
-
-        const changeElement = document.getElementById('last-24h-change');
-        changeElement.innerText = changeText;
-        changeElement.classList.remove('change-up', 'change-down');
-        if (change24h > 0) changeElement.classList.add('change-up');
-        else if (change24h < 0) changeElement.classList.add('change-down');
-    } else {
-        document.getElementById('last-24h-change').innerText = 'N/A';
-    }
-
-    // Xisaabi isbeddelka 7-dii maalmood ee la soo dhaafay
-    const sevenDaysAgo = now.getTime() - (7 * 24 * 60 * 60 * 1000);
-    const ratesLast7d = usdRates.filter(d => new Date(d.created_at).getTime() >= sevenDaysAgo);
-
-    if (ratesLast7d.length >= 2) {
-        const latestRate = Number(ratesLast7d[0].rate);
-        const previousRate = Number(ratesLast7d[ratesLast7d.length - 1].rate);
-        const change7d = (latestRate - previousRate) / previousRate * 100;
-        const changeText = `${change7d > 0 ? '+' : ''}${change7d.toFixed(2)}%`;
-
-        const changeElement = document.getElementById('last-7d-change');
-        changeElement.innerText = changeText;
-        changeElement.classList.remove('change-up', 'change-down');
-        if (change7d > 0) changeElement.classList.add('change-up');
-        else if (change7d < 0) changeElement.classList.add('change-down');
-    } else {
-        document.getElementById('last-7d-change').innerText = 'N/A';
-    }
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+    document.getElementById('real-date').innerText = now.toLocaleDateString('en-US', dateOptions);
+    document.getElementById('real-time').innerText = now.toLocaleTimeString('en-US', timeOptions);
 }
-
-
-// ----------------------------------------------------
-// Qaybta 5: Sariflayaasha (Render Exchangers)
-// ----------------------------------------------------
-
-function renderExchangersTable(exchangers) {
-    const tableBody = document.getElementById('exchangersTableBody');
-    tableBody.innerHTML = ''; // Nadiifi
-
-    if (!exchangers || exchangers.length === 0) {
-        tableBody.innerHTML = '<tr><td colspan="4">Wali ma jiraan wax sariflayaal ah oo la diiwaangeliyey.</td></tr>';
-        return;
-    }
-
-    // Ku shub xogta la helay miiska
-    exchangers.forEach(exchanger => {
-        const row = tableBody.insertRow();
-        
-        let cell = row.insertCell();
-        cell.textContent = exchanger.magaca || 'N/A';
-
-        cell = row.insertCell();
-        cell.textContent = exchanger.lam_sariflaha || 'N/A';
-
-        cell = row.insertCell();
-        const rateValue = exchanger.sarifle_rate;
-        cell.textContent = rateValue ? parseFloat(rateValue).toLocaleString('en-US') : 'N/A';
-
-        cell = row.insertCell();
-        const whatsappLinkValue = exchanger.whatsapp;
-        if (whatsappLinkValue && whatsappLinkValue.includes('wa.me')) {
-            const whatsappLink = document.createElement('a');
-            whatsappLink.href = whatsappLinkValue;
-            whatsappLink.textContent = 'WhatsApp';
-            whatsappLink.target = '_blank';
-            whatsappLink.classList.add('whatsapp-link');
-            cell.appendChild(whatsappLink);
-        } else {
-            cell.textContent = 'N/A';
-        }
-    });
-}
-
-function setupEventListeners() {
-    const viewAllBtn = document.getElementById('viewAllBtn');
-    if (viewAllBtn) {
-        viewAllBtn.addEventListener('click', () => {
-            alert('Wad shaqada "View All Sarifayaasha"');
-        });
-    }
-}
-
-// ----------------------------------------------------
-// Qaybta 6: Wararka (Render News)
-// ----------------------------------------------------
-
-function getShortContent(content) {
-    const words = content.split(' ');
-    const shortWords = words.slice(0, 10);
-    return shortWords.join(' ') + '...';
-}
-
-function renderLatestNews(news) {
-    const latestNewsContainer = document.querySelector('#latest-news');
-    latestNewsContainer.innerHTML = ''; // Nadiifi
-
-    if (news && news.length > 0) {
-        news.forEach(item => {
-            const newsItem = document.createElement('a');
-            newsItem.href = `/newspost?id=${item.id}`;
-            newsItem.classList.add('news-item');
-
-            const previewContent = getShortContent(item.content);
-
-            newsItem.innerHTML = `
-                <div class="news-image">
-                    <img src="${item.image_url || '../images/newsicon.png'}" alt="${item.title}">
-                </div>
-                <div class="news-content">
-                    <h4>${item.title}</h4>
-                    <p>${previewContent}</p>
-                </div>
-            `;
-            latestNewsContainer.appendChild(newsItem);
-        });
-    } else {
-        latestNewsContainer.innerHTML = '<p>No news found.</p>';
-    }
-}
-
-// ----------------------------------------------------
-// Qaybta 7: Crypto Rates (Waa sidii hore, weli waxay toos ula xiriiraan CoinGecko)
-// ----------------------------------------------------
-
-async function fetchAndRenderCrypto() {
-    const cryptoGrid = document.getElementById('crypto-cards-grid');
-    if (!cryptoGrid) return;
-    cryptoGrid.innerHTML = `<div class="loading-state"><p>Loading crypto data...</p></div>`;
-
-
-    try {
-        const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=8&page=1&sparkline=false');
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        renderCryptoCards(data); 
-
-    } catch (error) {
-        console.error("Error fetching crypto data:", error);
-        if (cryptoGrid) {
-            cryptoGrid.innerHTML = `<p class="error-state">Failed to load crypto data. Please try again later.</p>`;
-        }
-    }
-}
-
-function renderCryptoCards(cryptos) {
-    const cryptoGrid = document.getElementById('crypto-cards-grid');
-    if (!cryptoGrid) return;
-
-    cryptoGrid.innerHTML = ''; // Nadiifi
-
-    cryptos.forEach(crypto => {
-        const priceChange = crypto.price_change_percentage_24h.toFixed(2);
-        const card = document.createElement('div');
-        card.className = 'crypto-card';
-        card.innerHTML = `
-            <img src="${crypto.image}" alt="${crypto.name}" class="crypto-icon">
-            <div class="crypto-info">
-                <h3>${crypto.name} (${crypto.symbol.toUpperCase()})</h3>
-                <p class="crypto-price">$${crypto.current_price.toFixed(2)}</p>
-                <p class="crypto-change ${priceChange >= 0 ? 'up' : 'down'}">
-                    ${priceChange >= 0 ? '▲' : '▼'} ${priceChange}% (24h)
-                </p>
-            </div>
-        `;
-        cryptoGrid.appendChild(card);
-    });
-}
-
-
-// ... (Koodhka kale: updateDateTime, updateChart, updatePrediction, sharing, search, dark mode, language, notifications) ...
-
-
-// Xusuusin: Waa in aad ku xirtaa marka boggu shaqeeyo (Hadda waxay ku jiraan document.addEventListener('DOMContentLoaded', ...)-kii ugu horreeyay).
