@@ -6,6 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY; 
 
+
 // Hubinta degdegga ah (Haddii furayaashu maqan yihiin, wuxuu koodhku jabi doonaa bilowga)
 if (!supabaseUrl || !supabaseServiceKey) {
   // Waxaa muhiim ah in aad Vercel Settings: Environment Variables ku darto labadan fure
