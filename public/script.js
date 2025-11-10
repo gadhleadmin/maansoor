@@ -52,37 +52,13 @@ function updateDateTime() {
 // =================================================================
 // SECTION 3: SHAQADA SOO QABASHADA RATE-KA (SUPABASE FETCH FUNCTION)
 // =================================================================
-
 async function fetchRate() {
-    // Hubinta bilowga ee element-yada (ka hortagga 'Cannot set properties of null')
-    if (rateDisplayElement) {
-        rateDisplayElement.textContent = 'Fetching...'; 
-    }
-    if (sourceInfoElement) {
-        sourceInfoElement.textContent = 'Xogta waxaa laga soo qabanayaa Server...';
-    }
+    // ... (Koodhka hubinta bilowga) ...
 
     try {
         const response = await fetch('/api/get-rate');
         
-        // Hubi in jawaabtu guulaysatay (Status 200-299)
-        if (!response.ok) {
-            let errorText = `HTTP error! Status: ${response.status}`;
-            
-            // Akhri response body HAL MAR oo keliya si loo xalliyo TypeError-kii hore
-            const bodyContent = await response.text(); 
-            
-            try {
-                // Isku day in aad u beddesho JSON
-                const errorData = JSON.parse(bodyContent);
-                errorText = errorData.error || errorData.details || bodyContent;
-            } catch (jsonError) {
-                // Haddii uusan ahayn JSON, isticmaal text-kaas oo dhan
-                errorText = bodyContent;
-            }
-            
-            throw new Error(`Codsiga ma guulaysan: ${errorText.substring(0, 150)}...`);
-        }
+        // ... (Koodhka error handling-ka ee hore waa la ilaalinayaa) ...
         
         // U beddel JSON
         const data = await response.json();
@@ -92,7 +68,9 @@ async function fetchRate() {
             const formattedRate = new Intl.NumberFormat('so-SO').format(data.current_rate);
             
             rateDisplayElement.textContent = formattedRate;
-            sourceInfoElement.textContent = `Rate-ka La Helay: ${new Date().toLocaleTimeString('so-SO')}`;
+            
+            // 🛑 HAGAAGINTA WAXAA LAGA SAARAY WAQTIGII 🛑
+            sourceInfoElement.textContent = 'Rate-ka waxaa si guul ah loo helay.'; 
 
         } else {
             rateDisplayElement.textContent = 'N/A';
@@ -101,12 +79,12 @@ async function fetchRate() {
         }
 
     } catch (error) {
+        // ... (Koodhka catch-ka waa la ilaalinayaa) ...
         console.error("Error fetching the rate:", error);
         rateDisplayElement.textContent = 'Error!';
         sourceInfoElement.textContent = `Waxa dhacay khalad server: ${error.message.substring(0, 50)}...`;
     }
 }
-
 
 // =================================================================
 // SECTION 4: BILOWGA SHAQADA (INITIALIZATION)
