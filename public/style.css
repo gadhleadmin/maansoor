@@ -1,192 +1,59 @@
-/* 🌐 Qurux badan + soo jiidasho design live rate page */
-:root {
-  --primary: #00ffd0;
-  --primary-dark: #00bfa6;
-  --bg-dark: #0b1120;
-  --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  --text-light: #f8fafc;
-  --muted: #94a3b8;
-  --card-bg: rgba(255, 255, 255, 0.06);
-  --border: rgba(255, 255, 255, 0.1);
-  --radius: 18px;
-  --blur: 16px;
-  --shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Poppins", sans-serif;
-}
-
 body {
-  background: var(--bg-gradient);
-  color: var(--text-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* 📦 Card Container */
-.live-rate-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  max-width: 420px;
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px 0;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.live-rate-sharing {
-  background: var(--card-bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  backdrop-filter: blur(var(--blur));
-  padding: 25px;
-  width: 100%;
-  box-shadow: var(--shadow);
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s ease;
+.container {
+    padding: 40px 20px;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
 }
 
-/* ✨ light effect */
-.live-rate-sharing::before {
-  content: "";
-  position: absolute;
-  top: -40%;
-  left: -40%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(0, 255, 208, 0.08), transparent 70%);
-  animation: shine 8s infinite linear;
-}
-@keyframes shine {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.live-rate-sharing:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 40px rgba(0, 255, 208, 0.25);
-}
-
-/* 🇸🇴 Header */
-.live-rate-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-.live-rate-header img {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  border: 2px solid var(--primary);
-  padding: 2px;
-  background: rgba(255, 255, 255, 0.05);
-}
-.live-rate-header h4 {
-  font-size: 1.05rem;
-  color: var(--primary);
-  letter-spacing: 0.4px;
-}
-
-/* 🕒 Time + Date */
-.time-date {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 15px;
-}
-
-/* 💰 Rate display */
 .rate-display {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 12px;
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    border-left: 5px solid #4CAF50;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
 }
+
 #main-rate {
-  font-size: 2.8rem;
-  font-weight: 800;
-  color: var(--text-light);
-  text-shadow: 0 0 15px rgba(0, 255, 208, 0.2);
+    font-size: 3.5em;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1;
+    font-weight: bold;
 }
+
 .currency-label {
-  font-size: 1rem;
-  color: var(--muted);
+    font-size: 1.5em;
+    color: #7f8c8d;
+    margin-left: 10px;
+    padding-bottom: 5px; /* Si uu ula simo number-ka */
 }
 
-/* 📈 Rate change + indicators */
-.rate-update {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 8px;
-}
-.rate-change {
-  font-weight: 600;
-  font-size: 1rem;
-  text-align: center;
-  flex: 1 1 100%;
-  margin-bottom: 10px;
-}
-.rate-change.positive {
-  color: #00ff9d;
-}
-.rate-change.negative {
-  color: #ff5a5a;
-}
-
-/* 🔴 Live indicators */
-.gacanta-danbe, .live-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  padding: 6px 10px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.live-indicator {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--primary);
-  box-shadow: 0 0 8px var(--primary);
-  animation: pulse 1.6s infinite;
-}
-@keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  70% { transform: scale(2.2); opacity: 0; }
-  100% { transform: scale(1); opacity: 0; }
-}
-
-/* 🧾 Footer text */
-.update-frequency, #source p {
-  text-align: center;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-.update-frequency {
-  margin-top: 15px;
-}
-#source p {
-  margin-top: 5px;
-  font-weight: 500;
-}
-
-/* 📱 Responsive */
-@media (max-width: 420px) {
-  #main-rate {
-    font-size: 2.3rem;
-  }
+.source-info {
+    font-size: 0.9em;
+    color: #95a5a6;
 }
